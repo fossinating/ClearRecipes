@@ -111,6 +111,7 @@ import { sql, relations } from "drizzle-orm"
       diet_vegan: boolean("diet_vegan"),
       diet_gluten_free: boolean("diet_gluten_free"),
       diet_halal: boolean("diet_halal"),
+      diet_pescatarian: boolean("diet_pescatarian"),
       allergen_wheat: boolean("allergen_wheat"),
       allergen_dairy: boolean("allergen_dairy"),
       allergen_egg: boolean("allergen_egg"),
