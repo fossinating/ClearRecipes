@@ -7,7 +7,7 @@ import {
   timestamp,
   uniqueIndex,
   varchar,
-  binary,
+  boolean,
   } from "drizzle-orm/mysql-core"
   import type { AdapterAccount } from "@auth/core/adapters"
 import { sql, relations } from "drizzle-orm"
@@ -21,6 +21,7 @@ import { sql, relations } from "drizzle-orm"
       fsp: 3
     }).default(sql`now(3)`),
     image: varchar('image', { length: 191 }),
+    role: int("role"),
     created_at: timestamp('created_at').notNull().default(sql`CURRENT_TIMESTAMP`),
     updated_at: timestamp('updated_at').notNull().default(sql`CURRENT_TIMESTAMP`).onUpdateNow(),
   },
@@ -89,7 +90,7 @@ import { sql, relations } from "drizzle-orm"
       instructions: text("instructions").notNull(),
       description: text("description").notNull(),
       ownerID: varchar("userId", { length: 255 }).notNull(),
-      isPublic: binary("isPublic"),
+      isPublic: boolean("isPublic"),
       time: int("time").notNull(),
       yield: varchar("yield", {length: 255}).notNull()
     }
@@ -102,22 +103,23 @@ import { sql, relations } from "drizzle-orm"
   export const ingredients = mysqlTable(
     "ingredient",
     {
-      id: varchar('id', { length: 255 }).primaryKey().notNull(),
+      id: int('id').primaryKey().notNull().autoincrement(),
       ownerID: varchar("ownerID", { length: 255 }).notNull(),
+      custom: boolean("custom").notNull(),
       name: varchar("name", { length: 255 }).notNull(),
-      diet_vegetarian: binary("diet_vegetarian"),
-      diet_vegan: binary("diet_vegan"),
-      diet_gluten_free: binary("diet_gluten_free"),
-      diet_halal: binary("diet_halal"),
-      allergen_wheat: binary("allergen_wheat"),
-      allergen_dairy: binary("allergen_dairy"),
-      allergen_egg: binary("allergen_egg"),
-      allergen_soy: binary("allergen_soy"),
-      allergen_fish: binary("allergen_fish"),
-      allergen_shellfish: binary("allergen_shellfish"),
-      allergen_treenuts: binary("allergen_treenuts"),
-      allergen_peanuts: binary("allergen_peanuts"),
-      allergen_sesame: binary("allergen_sesame"),
+      diet_vegetarian: boolean("diet_vegetarian"),
+      diet_vegan: boolean("diet_vegan"),
+      diet_gluten_free: boolean("diet_gluten_free"),
+      diet_halal: boolean("diet_halal"),
+      allergen_wheat: boolean("allergen_wheat"),
+      allergen_dairy: boolean("allergen_dairy"),
+      allergen_egg: boolean("allergen_egg"),
+      allergen_soy: boolean("allergen_soy"),
+      allergen_fish: boolean("allergen_fish"),
+      allergen_shellfish: boolean("allergen_shellfish"),
+      allergen_treenuts: boolean("allergen_treenuts"),
+      allergen_peanuts: boolean("allergen_peanuts"),
+      allergen_sesame: boolean("allergen_sesame"),
     }
   )
 
@@ -130,7 +132,6 @@ import { sql, relations } from "drizzle-orm"
     {
       recipeID: int("recipeID").notNull(),
       ingredientID: int("ingredientID").notNull(),
-      customIngredient: binary("isCustomIngredient").notNull(),
       quantity: varchar("quantity", {length: 255}).notNull(),
     }
   )
