@@ -104,11 +104,17 @@ export default function Page() {
         if (recipeHours.current?.value?.length === 0) {
             setHourError("Required");
             flag = true;
+        } else if (isNaN(Number(recipeHours.current?.value))) {
+            setHourError("Must be a number");
+            flag = true;
         } else {
             setHourError(undefined);
         }
         if (recipeMinutes.current?.value?.length === 0) {
             setMinError("Required");
+            flag = true;
+        } else if (isNaN(Number(recipeMinutes.current?.value))) {
+            setMinError("Must be a number");
             flag = true;
         } else {
             setMinError(undefined);
