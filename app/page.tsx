@@ -1,10 +1,9 @@
 import './index.css';
 //import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 //import reportWebVitals from './reportWebVitals';
-import Schedules from './pages/Schedules';
 
 export default function Page() {
-  return <Schedules></Schedules>
+  return <h1>Hello There!</h1>
 }
 
 // If you want your app to work offline and load faster, you can change

@@ -18,9 +18,8 @@ import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
 import { useEffect } from 'react';
-import AccountMenu from './lib/AccountMenu';
 import Link from "./lib/Link";
-import { updateUserData, useDispatch } from './lib/redux';
+import AccountMenu from './lib/AccountMenu';
 
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
