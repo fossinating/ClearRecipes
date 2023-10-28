@@ -8,6 +8,8 @@ import {
     FormControl,
     FormHelperText
     } from '@mui/material';
+import { UploadRecipeParams } from "@/api/recipe/upload/route";
+import { useRouter } from 'next/navigation';
 
 class Ingredient {
     name: string;
@@ -29,12 +31,15 @@ export default function Page() {
     let [nameError, setNameError] = React.useState<string>()
     let recipeDesc = React.useRef<HTMLInputElement>();
     let [descError, setDescError] = React.useState<string>()
+    let recipeInstructions = React.useRef<HTMLInputElement>();
+    let [instructionsError, setInstructionsError] = React.useState<string>()
     let recipeHours = React.useRef<HTMLInputElement>();
     let [hourError, setHourError] = React.useState<string>()
     let recipeMinutes = React.useRef<HTMLInputElement>();
     let [minError, setMinError] = React.useState<string>()
     let recipeYield = React.useRef<HTMLInputElement>();
     let [yieldError, setYieldError] = React.useState<string>()
+    const router = useRouter()
     
     let [ingredients, setIngredients] = React.useState<Array<Ingredient>>([new Ingredient()]);
 
@@ -70,7 +75,7 @@ export default function Page() {
         }
     }
 
-    const submitForm = () => {
+    const submitForm = async () => {
         let flag = false;
         if (!recipeName.current?.value || recipeName.current?.value?.length > 100) {
             setNameError("Error: recipe name is too long");
@@ -89,6 +94,12 @@ export default function Page() {
             flag = true;
         } else {
             setDescError(undefined);
+        }
+        if (recipeInstructions.current?.value?.length === 0) {
+            setInstructionsError("Required");
+            flag = true;
+        } else {
+            setInstructionsError(undefined);
         }
         if (recipeHours.current?.value?.length === 0) {
             setHourError("Required");
@@ -124,7 +135,19 @@ export default function Page() {
             return ingredient;
         }))
         if (!flag) {
-            window.alert("Submitted")
+            const response = await fetch("/api/recipe/upload", {
+                method: "POST",
+                body: JSON.stringify({
+                    name: recipeName.current?.value,
+                    instructions: recipeInstructions.current?.value,
+                    description: recipeDesc.current?.value,
+                    time: parseInt(recipeHours.current?.value as string)*60 + parseInt(recipeMinutes.current?.value as string),
+                    yield: recipeYield.current?.value,
+                    ingredients: ingredients.map((ingredient) => {return {name: ingredient.name, amount: ingredient.amount}})
+                } as UploadRecipeParams),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+            }).then((response) => response.json())
+            .then(data => router.push("/recipe/"+data["recipeID"]))
         }
     }
 
@@ -134,12 +157,13 @@ export default function Page() {
         <Box>
             <TextField error={nameError !== undefined} variant="outlined" label="Name" inputRef={recipeName} helperText={nameError}/>
             <TextField multiline error={descError !== undefined} variant="outlined" label="Description" inputRef={recipeDesc} helperText={descError}/>
+            <TextField multiline error={instructionsError !== undefined} variant="outlined" label="Instructions" inputRef={recipeInstructions} helperText={instructionsError}/>
             <TextField error={hourError !== undefined} variant="outlined" label="Hours" inputRef={recipeHours} helperText={hourError}/>
             <TextField error={minError !== undefined} variant="outlined" label="Minutes" inputRef={recipeMinutes} helperText={minError}/>
             <TextField error={yieldError !== undefined} variant="outlined" label="Yield" inputRef={recipeYield} helperText={yieldError}/>
 
             {ingredients.map((ingredient, index) => 
-            <Box>
+            <Box key={index}>
             <TextField error={ingredient.nameError !== undefined} helperText={ingredient.nameError} variant="outlined" label="Ingredient Name" value={ingredient.name} onChange={
                 (event: React.ChangeEvent<HTMLInputElement>) => {updateIngredientName(index, event.target.value)}}/>
             <TextField error={ingredient.amountError !== undefined} helperText={ingredient.amountError} variant="outlined" label="Ingredient Amount" value={ingredient.amount} onChange={

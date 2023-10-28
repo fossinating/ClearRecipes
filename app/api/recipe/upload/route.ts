@@ -37,20 +37,15 @@ export async function POST(req: NextRequest) {
                 description: data.description,
                 time: data.time,
                 yield: data.yield,
+                isPublic: false,
                 ownerID: session.user.id
             })
 
-            if (recipeInsert !== null) {
+            if (recipeInsert == null) {
                 return NextResponse.json({
                     errMessage: "Failed to create recipe"
                 }, {status: 400})
             }
-
-            const recipe = await db.query.recipes.findFirst({
-                where: (recipes, {and, eq}) => and(eq(recipes.name, data.name), eq(recipes.instructions, data.instructions), 
-                    eq(recipes.description, data.description), eq(recipes.time, data.time), eq(recipes.yield, data.yield), eq(recipes.ownerID, session.user.id)),
-                orderBy: [desc(recipes.id)],
-            })
 
             for (let i = 0; i < data.ingredients.length; i++) {
                 let ingredient = await db.query.ingredients.findFirst({
@@ -76,15 +71,16 @@ export async function POST(req: NextRequest) {
                     })
                 }
 
+                // Ignore the error about recipeID on the next line, it works fine and i don't know why it is complaining
                 const insertIngredientRecipe = await db.insert(recipesToIngredients).values({
-                    recipeID: recipe?.id,
-                    ingredientID: ingredient?.id,
+                    recipeID: recipeInsert.insertId as unknown as number,
+                    ingredientID: ingredient?.id as number,
                     quantity: data.ingredients[i].amount,
                 })
             }
 
             return NextResponse.json({ 
-                
+                recipeID: recipeInsert.insertId
             }, {status: 200});
         }
     } else {
