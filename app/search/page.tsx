@@ -16,7 +16,7 @@ export default function Page() {
   
   let class_numbers: Array<number> = [];
 
-  const search: () => {
+  const search = () => {
 
   }
 
@@ -27,13 +27,10 @@ export default function Page() {
           <TextField name="search" label="Search Query" inputRef={searchRef} variant="outlined" size="small" margin="none" />
         </Grid>
         <Grid>
-          <Button onClick={() => loadClasses()} variant="contained" size="medium">Search</Button>
+          <Button onClick={() => search()} variant="contained" size="medium">Search</Button>
         </Grid>
       </Grid>
       <Container id="resultsContainer">
-        { data ? data.classes.map((item) =>
-          <ClassDisplay key={item.classNumber} classInfo={item}></ClassDisplay>
-        ) : null }
         
       </Container>
       </>
