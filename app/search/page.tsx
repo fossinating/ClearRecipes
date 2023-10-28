@@ -1,10 +1,7 @@
 'use client';
-import { useLazyQuery } from "@apollo/client";
 import { Button, Container, FormControl, InputLabel, MenuItem, TextField, Unstable_Grid2 as Grid } from "@mui/material";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useRef, useState } from "react";
-import { gql } from "../../src/__generated__";
-import ClassDisplay from "../lib/ClassDisplay";
 import { SectionData, useTerms } from "../lib/Common";
 import "./Search.css";
 

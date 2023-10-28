@@ -3,6 +3,7 @@
 import CalendarViewWeekIcon from '@mui/icons-material/CalendarViewWeek';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
+import UploadIcon from '@mui/icons-material/Upload';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -86,8 +87,9 @@ function NavDrawer(props: NavDrawerProps){
     <div id="navDrawer" className={props.open ? 'open' : undefined}>
       <List>
       {[
-        new NavData("Schedule", <CalendarViewWeekIcon />, "/"),
-        new NavData("Search", <SearchIcon />, "/search")
+        new NavData("Home", <CalendarViewWeekIcon />, "/"),
+        new NavData("Search", <SearchIcon />, "/search"),
+        new NavData("Upload", <UploadIcon />, "/upload")
       ].map((item, index) => (
         <NavItem item={item} key={item.page}/>
       ))}</List>

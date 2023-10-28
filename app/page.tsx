@@ -1,9 +1,23 @@
 import './index.css';
+import * as React from 'react';
+import { Box, TextField, Container, Typography } from '@mui/material';
+
+import RecipeCard from './lib/RecipeCard';
 //import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 //import reportWebVitals from './reportWebVitals';
 
 export default function Page() {
-  return <h1>Hello There!</h1>
+  return (
+    <Box>
+      <Typography variant='h3'>Upload Recipe</Typography>
+      <TextField id="search-box" label="Search" />
+      
+      <Container id="recipeContainer">
+        <RecipeCard />
+        <RecipeCard />
+      </Container>
+    </Box>
+  );
 }
 
 // If you want your app to work offline and load faster, you can change
