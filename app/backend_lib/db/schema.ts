@@ -7,6 +7,7 @@ import {
   timestamp,
   uniqueIndex,
   varchar,
+  binary,
   } from "drizzle-orm/mysql-core"
   import type { AdapterAccount } from "@auth/core/adapters"
 import { sql, relations } from "drizzle-orm"
@@ -26,10 +27,6 @@ import { sql, relations } from "drizzle-orm"
   user => ({
     emailIndex: uniqueIndex('users__email__idx').on(user.email),
   }))
-
-export const usersRelations = relations(users, ({ many }) => ({
-	schedules: many(schedules),
-}));
   
   export const accounts = mysqlTable(
     "account",
@@ -84,38 +81,69 @@ export const usersRelations = relations(users, ({ many }) => ({
     })
   )
   
-  export const scheduledClasses = mysqlTable(
-    "scheduledClass",
+  export const recipes = mysqlTable(
+    "recipe",
     {
       id: int("id").notNull().primaryKey().autoincrement(),
-      scheduleID: varchar("scheduleID", { length: 255 }).notNull(),
-      classNumber: int("classNumber").notNull()
+      name: varchar("name", { length: 255 }).notNull(),
+      instructions: text("instructions").notNull(),
+      description: text("description").notNull(),
+      ownerID: varchar("userId", { length: 255 }).notNull(),
+      isPublic: binary("isPublic"),
+      time: int("time").notNull(),
+      yield: varchar("yield", {length: 255}).notNull()
     }
   )
-  
-  export const scheduledClassesRelations = relations(scheduledClasses, ({ one }) => ({
-    schedule: one(schedules, {
-      fields: [scheduledClasses.scheduleID],
-      references: [schedules.id]
-    })
-  }));
 
-  export const schedules = mysqlTable(
-    "schedule",
+  export const recipeRelations = relations(recipes, ({many}) => ({
+    recipesToIngredients: many(recipesToIngredients),
+  }))
+
+  export const ingredients = mysqlTable(
+    "ingredient",
     {
       id: varchar('id', { length: 255 }).primaryKey().notNull(),
       ownerID: varchar("ownerID", { length: 255 }).notNull(),
       name: varchar("name", { length: 255 }).notNull(),
-      term: varchar("term", { length: 16 }).notNull()
+      diet_vegetarian: binary("diet_vegetarian"),
+      diet_vegan: binary("diet_vegan"),
+      diet_gluten_free: binary("diet_gluten_free"),
+      diet_halal: binary("diet_halal"),
+      allergen_wheat: binary("allergen_wheat"),
+      allergen_dairy: binary("allergen_dairy"),
+      allergen_egg: binary("allergen_egg"),
+      allergen_soy: binary("allergen_soy"),
+      allergen_fish: binary("allergen_fish"),
+      allergen_shellfish: binary("allergen_shellfish"),
+      allergen_treenuts: binary("allergen_treenuts"),
+      allergen_peanuts: binary("allergen_peanuts"),
+      allergen_sesame: binary("allergen_sesame"),
     }
   )
 
-  export const schedulesRelations = relations(schedules, ({ many, one }) => ({
-    classes: many(scheduledClasses),
-    owner: one(users, {
-      fields: [schedules.ownerID],
-      references: [users.id]
-    })
+  export const ingredientRelations = relations(ingredients, ({many}) => ({
+    recipesToIngredients: many(recipesToIngredients),
+  }))
+
+  export const recipesToIngredients = mysqlTable(
+    "recipeToIngredient",
+    {
+      recipeID: int("recipeID").notNull(),
+      ingredientID: int("ingredientID").notNull(),
+      customIngredient: binary("isCustomIngredient").notNull(),
+      quantity: varchar("quantity", {length: 255}).notNull(),
+    }
+  )
+ 
+  export const recipesToIngredientsRelations = relations(recipesToIngredients, ({ one }) => ({
+    recipe: one(recipes, {
+      fields: [recipesToIngredients.recipeID],
+      references: [recipes.id],
+    }),
+    ingredient: one(ingredients, {
+      fields: [recipesToIngredients.ingredientID],
+      references: [ingredients.id],
+    }),
   }));
 
   
