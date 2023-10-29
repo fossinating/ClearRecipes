@@ -18,4 +18,7 @@ export async function GET(req: NextRequest, {params}: {params: {recipe_id: numbe
             bookmarked: recipeBookmark !== null
         }, {status: 200});
     }
+    return NextResponse.json({ 
+        
+    }, {status: 401});
 }

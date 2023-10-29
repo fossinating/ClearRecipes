@@ -35,15 +35,9 @@ export async function POST(req: NextRequest) {
     }
     if (true) {
 
-        
-        const recipes = await db.query.recipes.findMany({
-            where: (recipes, {like, and, or, eq, notExists, exists}) => and((session && session?.user) ? or(eq(recipes.ownerID, session.user.id), recipes.isPublic) : recipes.isPublic, like(recipes.name, "%"+data.keywords+"%"), notExists(
-                db.select().from(recipesToIngredients).where(
-                    and(eq(recipesToIngredients.recipeID, recipes.id),
-                    exists(
-                    db.select().from(ingredients).where(and(eq(ingredients.id, recipesToIngredients.ingredientID),
-                    sql`
-                    (${ingredients.allergen_fish} AND ${data.allergen_fish as boolean}) OR
+        const recipe_ids = await db.execute(sql`select \`recipe\`.\`id\` from recipe where (\`recipe\`.\`isPublic\` OR \`recipe\`.\`ownerID\`=${session && session.user ? session.user.id : ""}) and not exists(
+            select * from recipeToIngredient where \`recipe\`.\`id\`=\`recipeToIngredient\`.recipeID and exists(
+                select * from ingredient where \`ingredient\`.\`id\`=\`recipeToIngredient\`.ingredientID and ((${ingredients.allergen_fish} AND ${data.allergen_fish as boolean}) OR
                     (${ingredients.allergen_peanuts} AND ${data.allergen_peanuts as boolean}) OR
                     (${ingredients.allergen_dairy} AND ${data.allergen_dairy as boolean}) OR 
                     (${ingredients.allergen_egg} AND ${data.allergen_egg as boolean}) OR
@@ -56,26 +50,38 @@ export async function POST(req: NextRequest) {
                     ((NOT ${ingredients.diet_halal}) AND ${data.diet_halal as boolean}) OR
                     ((NOT ${ingredients.diet_vegan}) AND ${data.diet_vegan as boolean}) OR
                     ((NOT ${ingredients.diet_vegetarian}) AND ${data.diet_vegetarian as boolean}) OR
-                    ((NOT ${ingredients.diet_pescatarian}) AND ${data.diet_pescatarian as boolean})`
-                    ))))))),
-            with: {
-                recipesToIngredients: {
-                    with: {
-                        ingredient: true
+                    ((NOT ${ingredients.diet_pescatarian}) AND ${data.diet_pescatarian as boolean}))))`);
+
+        console.log("Recipe IDS");
+        console.log(recipe_ids.rows);
+        if (recipe_ids.rows.length > 0) {
+            
+            const recipe_results = await db.query.recipes.findMany({
+                where: (recipes, {inArray}) => inArray(recipes.id, recipe_ids.rows.map((row => row.id))),
+                with: {
+                    recipesToIngredients: {
+                        with: {
+                            ingredient: true
+                        }
                     }
                 }
-            }
-        })
+            })
+            return NextResponse.json({ 
+                recipes: recipe_results.map((recipeData) => {
+                    return ({
+                        ...recipeData,
+                        ingredients: recipeData.recipesToIngredients.map((recipeToIngrient) => ({name: recipeToIngrient.ingredient, quantity: recipeToIngrient.quantity}))
+                    })
+                }).map(({recipesToIngredients, ...rest}) => rest)
+            }, {status: 200});
+        } else {
+            
+            return NextResponse.json({ 
+                recipes: []
+            }, {status: 200});
+        }
 
 
 
-        return NextResponse.json({ 
-            recipes: recipes.map((recipeData) => {
-                return ({
-                    ...recipeData,
-                    ingredients: recipeData.recipesToIngredients.map((recipeToIngrient) => ({name: recipeToIngrient.ingredient, quantity: recipeToIngrient.quantity}))
-                })
-            }).map(({recipesToIngredients, ...rest}) => rest)
-        }, {status: 200});
     }
 }
