@@ -37,7 +37,7 @@ export default async function Page({ params }: { params: { recipe_id: number } }
                 <Typography variant="h6">Yield: {recipe.yield}</Typography>
                 <Typography variant="h6">Author: {recipe.name}</Typography>
             </Box>
-            <Image src={recipe.imageSrc} alt={recipe.name} />
+            <img src={recipe.imageSrc} width={500} height={500} alt={recipe.name} />
             <Box sx={{ mt: 1 }}>
                 <Typography variant="h6">Ingredients</Typography>
                 <List sx={{ listStyleType: 'disc', ml: 4 }}>
