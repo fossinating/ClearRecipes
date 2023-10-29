@@ -83,7 +83,7 @@ import { sql, relations } from "drizzle-orm"
   )
 
   export const recipeBookmarks = mysqlTable(
-    "recipeBookmarks",
+    "recipeBookmark",
     {
       id: int("id").notNull().primaryKey().autoincrement(),
       userId: varchar("userId", { length: 255 }).notNull(),
@@ -109,7 +109,7 @@ import { sql, relations } from "drizzle-orm"
       name: varchar("name", { length: 255 }).notNull(),
       instructions: text("instructions").notNull(),
       description: text("description").notNull(),
-      ownerID: varchar("userId", { length: 255 }).notNull(),
+      ownerID: varchar("ownerID", { length: 255 }).notNull(),
       isPublic: boolean("isPublic"),
       imageSrc: varchar("imageSrc", { length: 255 }).notNull(),
       time: int("time").notNull(),
