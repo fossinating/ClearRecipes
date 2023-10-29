@@ -35,29 +35,30 @@ export async function POST(req: NextRequest) {
     }
     if (true) {
 
-        const recipe_ids = await db.execute(sql`select \`recipe\`.\`id\` from recipe where (\`recipe\`.\`isPublic\` OR \`recipe\`.\`ownerID\`=${session && session.user ? session.user.id : ""}) and not exists(
-            select * from recipeToIngredient where \`recipe\`.\`id\`=\`recipeToIngredient\`.recipeID and exists(
-                select * from ingredient where \`ingredient\`.\`id\`=\`recipeToIngredient\`.ingredientID and ((${ingredients.allergen_fish} AND ${data.allergen_fish as boolean}) OR
-                    (${ingredients.allergen_peanuts} AND ${data.allergen_peanuts as boolean}) OR
-                    (${ingredients.allergen_dairy} AND ${data.allergen_dairy as boolean}) OR 
-                    (${ingredients.allergen_egg} AND ${data.allergen_egg as boolean}) OR
-                    (${ingredients.allergen_sesame} AND ${data.allergen_sesame as boolean}) OR
-                    (${ingredients.allergen_shellfish} AND ${data.allergen_shellfish as boolean}) OR
-                    (${ingredients.allergen_soy} AND ${data.allergen_soy as boolean}) OR
-                    (${ingredients.allergen_treenuts} AND ${data.allergen_treenuts as boolean}) OR
-                    (${ingredients.allergen_wheat} AND ${data.allergen_wheat as boolean}) OR
-                    ((NOT ${ingredients.diet_gluten_free}) AND ${data.diet_gluten_free as boolean}) OR
-                    ((NOT ${ingredients.diet_halal}) AND ${data.diet_halal as boolean}) OR
-                    ((NOT ${ingredients.diet_vegan}) AND ${data.diet_vegan as boolean}) OR
-                    ((NOT ${ingredients.diet_vegetarian}) AND ${data.diet_vegetarian as boolean}) OR
-                    ((NOT ${ingredients.diet_pescatarian}) AND ${data.diet_pescatarian as boolean}))))`);
+        const recipe_ids = await db.query.recipes.findMany({
+            where: sql`(${recipes.isPublic} OR ${recipes.ownerID}=${session && session.user ? session.user.id : ""}) and not exists(
+            select * from recipeToIngredient where ${recipes.id}=\`recipeToIngredient\`.recipeID and exists(
+                select * from ingredient where \`ingredient\`.\`id\`=\`recipeToIngredient\`.ingredientID and (
+                    (\`ingredient\`.\`allergen_fish\` AND ${data.allergen_fish as boolean}) OR
+                    (\`ingredient\`.\`allergen_peanuts\` AND ${data.allergen_peanuts as boolean}) OR
+                    (\`ingredient\`.\`allergen_dairy\` AND ${data.allergen_dairy as boolean}) OR 
+                    (\`ingredient\`.\`allergen_egg\` AND ${data.allergen_egg as boolean}) OR
+                    (\`ingredient\`.\`allergen_sesame\` AND ${data.allergen_sesame as boolean}) OR
+                    (\`ingredient\`.\`allergen_shellfish\` AND ${data.allergen_shellfish as boolean}) OR
+                    (\`ingredient\`.\`allergen_soy\` AND ${data.allergen_soy as boolean}) OR
+                    (\`ingredient\`.\`allergen_treenuts\` AND ${data.allergen_treenuts as boolean}) OR
+                    (\`ingredient\`.\`allergen_wheat\` AND ${data.allergen_wheat as boolean}) OR
+                    ((NOT \`ingredient\`.\`diet_gluten_free\`) AND ${data.diet_gluten_free as boolean}) OR
+                    ((NOT \`ingredient\`.\`diet_halal\`) AND ${data.diet_halal as boolean}) OR
+                    ((NOT \`ingredient\`.\`diet_vegan\`) AND ${data.diet_vegan as boolean}) OR
+                    ((NOT \`ingredient\`.\`diet_vegetarian\`) AND ${data.diet_vegetarian as boolean}) OR
+                    ((NOT \`ingredient\`.\`diet_pescatarian\`) AND ${data.diet_pescatarian as boolean}))))`});
 
-        console.log("Recipe IDS");
-        console.log(recipe_ids.rows);
-        if (recipe_ids.rows.length > 0) {
+    
+        if (recipe_ids.length > 0) {
             
             const recipe_results = await db.query.recipes.findMany({
-                where: (recipes, {inArray}) => inArray(recipes.id, recipe_ids.rows.map((row => row.id))),
+                where: (recipes, {inArray}) => inArray(recipes.id, recipe_ids.map((recipe_data => (recipe_data).id))),
                 with: {
                     recipesToIngredients: {
                         with: {
