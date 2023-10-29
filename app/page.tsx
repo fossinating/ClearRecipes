@@ -156,7 +156,7 @@ export default function Page() {
   
   const [results, setResults] = useState<Array<Recipe>>();
   React.useEffect(() => {
-    fetch("/api/user/recipes", {
+    fetch("/api/home", {
         method:"GET",
     })
     .then((res) => res.json())
