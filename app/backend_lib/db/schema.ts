@@ -85,8 +85,9 @@ import { sql, relations } from "drizzle-orm"
   export const recipeFavorites = mysqlTable(
     "recipeFavorite",
     {
+      id: int("id").notNull().primaryKey().autoincrement(),
       userId: varchar("userId", { length: 255 }).notNull(),
-      recipeID: int("id").notNull(),
+      recipeID: int("recipeID").notNull(),
     }
   )
 
@@ -155,6 +156,7 @@ import { sql, relations } from "drizzle-orm"
   export const recipesToIngredients = mysqlTable(
     "recipeToIngredient",
     {
+      id: int("id").notNull().primaryKey().autoincrement(),
       recipeID: int("recipeID").notNull(),
       ingredientID: int("ingredientID").notNull(),
       quantity: varchar("quantity", {length: 255}).notNull(),
