@@ -195,7 +195,7 @@ export default function Page() {
         </Grid>
   </Grid>*/}
       <Container id="resultsContainer">
-        { results ? results.map((recipe: Recipe) => <RecipeCard key={recipe.id}/>) : null}
+        { results ? results.map((recipe: Recipe) => <RecipeCard key={recipe.id} recipe={recipe}/>) : null}
       </Container>
       </>
     );

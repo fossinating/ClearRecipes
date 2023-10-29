@@ -6,7 +6,9 @@ import RecipeCard from '../lib/RecipeCard';
 import { useEffect, useRef, useState } from 'react';
 import React from 'react';
 import SearchIcon from '@mui/icons-material/Search';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { RecipeSearchParams } from '@/api/recipe/search/route';
+import { Recipe, RecipeData } from '@/my/saved/page';
 //import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 //import reportWebVitals from './reportWebVitals';
 
@@ -49,31 +51,75 @@ function Item(props: BoxProps) {
 }
 
 export default function Page() {
-
+  const searchParams = useSearchParams();
   const [expanded, setExpanded] = React.useState(false);
   let keyword = React.useRef<HTMLInputElement>();
-  const [vegetarian, setVegetarian] = useState(false);
-  const [vegan, setVegan] = useState(false);
-  const [halal, setHalal] = useState(false);
-  const [glutenFree, setGlutenFree] = useState(false);
-  const [pescatarian, setPescatarian] = useState(false);
-  const [eggs, setEggs] = useState(false);
-  const [dairy, setDairy] = useState(false);
-  const [wheat, setWheat] = useState(false);
-  const [peanuts, setPeanuts] = useState(false);
-  const [treenuts, setTreenuts] = useState(false);
-  const [soy, setSoy] = useState(false);
-  const [fish, setFish] = useState(false);
-  const [shellfish, setShellfish] = useState(false);
-  const [sesame, setSesame] = useState(false);
+  const [vegetarian, setVegetarian] = useState(searchParams.has("vegetarian") ? searchParams.get("vegetarian") === "true" : false);
+  const [vegan, setVegan] = useState(searchParams.has("vegan") ? searchParams.get("vegan") === "true" : false);
+  const [halal, setHalal] = useState(searchParams.has("halal") ? searchParams.get("halal") === "true" : false);
+  const [glutenFree, setGlutenFree] = useState(searchParams.has("glutenFree") ? searchParams.get("glutenFree") === "true" : false);
+  const [pescatarian, setPescatarian] = useState(searchParams.has("pescatarian") ? searchParams.get("pescatarian") === "true" : false);
+  const [eggs, setEggs] = useState(searchParams.has("eggs") ? searchParams.get("eggs") === "true" : false);
+  const [dairy, setDairy] = useState(searchParams.has("dairy") ? searchParams.get("dairy") === "true" : false);
+  const [wheat, setWheat] = useState(searchParams.has("wheat") ? searchParams.get("wheat") === "true" : false);
+  const [peanuts, setPeanuts] = useState(searchParams.has("peanuts") ? searchParams.get("peanuts") === "true" : false);
+  const [treenuts, setTreenuts] = useState(searchParams.has("treenuts") ? searchParams.get("treenuts") === "true" : false);
+  const [soy, setSoy] = useState(searchParams.has("soy") ? searchParams.get("soy") === "true" : false);
+  const [fish, setFish] = useState(searchParams.has("fish") ? searchParams.get("fish") === "true" : false);
+  const [shellfish, setShellfish] = useState(searchParams.has("shellfish") ? searchParams.get("shellfish") === "true" : false);
+  const [sesame, setSesame] = useState(searchParams.has("sesame") ? searchParams.get("sesame") === "true" : false);
 
   const handleExpandClick = () => {
     setExpanded(true);
   };
 
+  const [results, setResults] = useState<Array<Recipe>>();
+
+  const search = () => {
+    console.log({
+      keywords: keyword.current?.value,
+      diet_pescatarian: pescatarian,
+      diet_vegetarian: vegetarian,
+      diet_gluten_free: glutenFree,
+      diet_halal: halal,
+      diet_vegan: vegan,
+      allergen_dairy: dairy,
+      allergen_egg: eggs,
+      allergen_fish: fish,
+      allergen_peanuts: peanuts,
+      allergen_sesame: sesame,
+      allergen_shellfish: shellfish,
+      allergen_soy: soy,
+      allergen_treenuts: treenuts,
+      allergen_wheat: wheat
+    } as RecipeSearchParams)
+    fetch("/api/recipe/search", {
+      method: "POST",
+      body: JSON.stringify({
+        keywords: keyword.current?.value,
+        diet_pescatarian: pescatarian,
+        diet_vegetarian: vegetarian,
+        diet_gluten_free: glutenFree,
+        diet_halal: halal,
+        diet_vegan: vegan,
+        allergen_dairy: dairy,
+        allergen_egg: eggs,
+        allergen_fish: fish,
+        allergen_peanuts: peanuts,
+        allergen_sesame: sesame,
+        allergen_shellfish: shellfish,
+        allergen_soy: soy,
+        allergen_treenuts: treenuts,
+        allergen_wheat: wheat
+      } as RecipeSearchParams)
+    }).then((res) => res.json())
+    .then((data) => setResults(data.recipes.map((recipeData: RecipeData) => new Recipe(recipeData))))
+  }
+
   useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    console.log(searchParams);
+    if (searchParams.size > 0) {
+      search()
+    }
   }, []);
   
   const SearchBar = () => {
@@ -102,11 +148,13 @@ export default function Page() {
         soy: soy.toString(), 
         sesame: sesame.toString() };
       console.log(paramsObj);
+
+      search()
     }
   
     return (
       <Card ref={ref}>
-        <TextField onClick={handleExpandClick} label="Search" fullWidth inputRef={keyword}
+        <TextField onClick={handleExpandClick} label="Search" fullWidth inputRef={keyword} defaultValue={searchParams.has("keyword") ? searchParams.get("keyword") : undefined}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -164,8 +212,7 @@ export default function Page() {
       <Typography variant='h3'>All Recipes</Typography>
       <SearchBar />
       <Container id="recipeContainer">
-        <RecipeCard />
-        <RecipeCard />
+      { results ? results.map((recipe: Recipe) => <RecipeCard key={recipe.id}/>) : null}
       </Container>
     </Box>
   );

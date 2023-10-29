@@ -11,13 +11,14 @@ import { CardActionArea, IconButton } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShareIcon from '@mui/icons-material/Share';
+import { Recipe } from '@/my/saved/page';
 
 export interface Ingredient {
     name: string;
     amount: string;
 }
 
-export interface Recipe {
+/*export interface Recipe {
     id: number
     name: string;
     description: string;
@@ -44,7 +45,7 @@ export interface Recipe {
         sesame: boolean
     };
     favorite: boolean;
-}
+}*/
 
 function Item(props: BoxProps) {
     const { sx, ...other } = props;
@@ -73,7 +74,7 @@ const bull = (
     </Box>
   );
 
-export default function RecipeCard() {
+export default function RecipeCard(props: {recipe: Recipe}) {
     
     const [clicked, setClicked] = useState(false)
     const handleFavoriteClick = () => {
@@ -89,7 +90,7 @@ export default function RecipeCard() {
             <CardActionArea onClick={() => {window.alert("Click")}}>
                 <CardContent>
                     <Typography variant="h5" component="div">
-                        Recipe Name
+                        {props.recipe.name}
                     </Typography>
                     <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
                         <Item>
@@ -97,7 +98,7 @@ export default function RecipeCard() {
                                 Time
                             </Typography>
                             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                Time
+                                {props.recipe.time}
                             </Typography>
                         </Item>
                         <Item>
@@ -105,12 +106,12 @@ export default function RecipeCard() {
                                 Yield
                             </Typography>
                             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                Yield
+                                {props.recipe.yield}
                             </Typography>
                         </Item>
                     </Box>
                     <Typography variant="body2">
-                        Description
+                        {props.recipe.description}
                     </Typography>
                 </CardContent>
             </CardActionArea>
