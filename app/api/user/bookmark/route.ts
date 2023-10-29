@@ -10,26 +10,6 @@ export interface BookmarkRecipeParams {
     recipeID: number;
     bookmark: boolean;
 }
-
-export async function GET(req: NextRequest) {
-    const session = await auth()
-    if (session && session?.user) {
-
-        let data: BookmarkRecipeParams = await req.json();
-        if (!data) {
-            return NextResponse.json({
-                errMessage: "Invalid data"
-            }, {status: 400})
-        }
-        const recipeBookmark = await db.query.recipeBookmarks.findFirst({
-            where: (recipeBookmarks, {eq, and}) => and(eq(recipeBookmarks.userId, session.user.id), eq(recipeBookmarks.recipeID, data.recipeID))
-        })
-
-        return NextResponse.json({ 
-            bookmarked: recipeBookmark !== null
-        }, {status: 200});
-    }
-}
  
 export async function POST(req: NextRequest) {
     const session = await auth()

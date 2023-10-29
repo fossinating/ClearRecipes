@@ -43,20 +43,20 @@ export async function POST(req: NextRequest) {
                     exists(
                     db.select().from(ingredients).where(and(eq(ingredients.id, recipesToIngredients.ingredientID),
                     sql`
-                    (${ingredients.allergen_dairy} AND ${data.allergen_dairy as boolean}) OR 
-                    (${ingredients.allergen_egg} AND ${data.allergen_egg as boolean}) OR
                     (${ingredients.allergen_fish} AND ${data.allergen_fish as boolean}) OR
                     (${ingredients.allergen_peanuts} AND ${data.allergen_peanuts as boolean}) OR
+                    (${ingredients.allergen_dairy} AND ${data.allergen_dairy as boolean}) OR 
+                    (${ingredients.allergen_egg} AND ${data.allergen_egg as boolean}) OR
                     (${ingredients.allergen_sesame} AND ${data.allergen_sesame as boolean}) OR
                     (${ingredients.allergen_shellfish} AND ${data.allergen_shellfish as boolean}) OR
                     (${ingredients.allergen_soy} AND ${data.allergen_soy as boolean}) OR
                     (${ingredients.allergen_treenuts} AND ${data.allergen_treenuts as boolean}) OR
                     (${ingredients.allergen_wheat} AND ${data.allergen_wheat as boolean}) OR
-                    (NOT ${ingredients.diet_gluten_free} AND ${data.diet_gluten_free as boolean}) OR
-                    (NOT ${ingredients.diet_halal} AND ${data.diet_halal as boolean}) OR
-                    (NOT ${ingredients.diet_vegan} AND ${data.diet_vegan as boolean}) OR
-                    (NOT ${ingredients.diet_vegetarian} AND ${data.diet_vegetarian as boolean}) OR
-                    (NOT ${ingredients.diet_pescatarian} AND ${data.diet_pescatarian as boolean})`
+                    ((NOT ${ingredients.diet_gluten_free}) AND ${data.diet_gluten_free as boolean}) OR
+                    ((NOT ${ingredients.diet_halal}) AND ${data.diet_halal as boolean}) OR
+                    ((NOT ${ingredients.diet_vegan}) AND ${data.diet_vegan as boolean}) OR
+                    ((NOT ${ingredients.diet_vegetarian}) AND ${data.diet_vegetarian as boolean}) OR
+                    ((NOT ${ingredients.diet_pescatarian}) AND ${data.diet_pescatarian as boolean})`
                     ))))))),
             with: {
                 recipesToIngredients: {

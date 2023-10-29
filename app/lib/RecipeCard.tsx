@@ -75,9 +75,8 @@ export default function RecipeCard(props: {recipe: Recipe}) {
 
     useEffect(() => {
         if (session) {
-            fetch("/api/user/bookmark", {
-                method: "GET",
-                body: JSON.stringify(props.recipe.id)})
+            fetch("/api/user/bookmark/"+props.recipe.id, {
+                method: "GET"})
             .then((res) => res.json())
             .then((data) => {setBookmarked(data.bookmarked)})
         }
