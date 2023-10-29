@@ -18,7 +18,8 @@ export default async function Page({ params }: { params: { recipe_id: number } }
                 with: {
                     ingredient: true
                 }
-            }
+            },
+            owner: true
         }
     })
 
@@ -35,7 +36,7 @@ export default async function Page({ params }: { params: { recipe_id: number } }
             <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', mt: 1 }}>
                 <Typography variant="h6">Time: { recipe.time && recipe.time > 60 ? recipe.time / 60 + " Hours, " + recipe.time / 60 + " Minutes" : recipe?.time + " Minutes"}</Typography>
                 <Typography variant="h6">Yield: {recipe.yield}</Typography>
-                <Typography variant="h6">Author: {recipe.name}</Typography>
+                <Typography variant="h6">Author: {recipe.owner.name}</Typography>
             </Box>
             <img src={recipe.imageSrc} width={500} height={500} alt={recipe.name} />
             <Box sx={{ mt: 1 }}>
