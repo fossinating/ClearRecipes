@@ -4,6 +4,7 @@ import { recipesToIngredients } from "@/backend_lib/db/schema";
 import { Box, List, ListItem, Typography } from "@mui/material";
 import { useEffect } from "react";
 import Image from "next/image"
+export const runtime = "edge"
 
 export default async function Page({ params }: { params: { recipe_id: number } }) {
 

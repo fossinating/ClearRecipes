@@ -1,4 +1,5 @@
 'use client';
+export const runtime = "edge"
 import "./recipes.css"
 import { Button, Container, FormControl, InputLabel, MenuItem, TextField, Unstable_Grid2 as Grid, touchRippleClasses } from "@mui/material";
 import { useRef, useState } from "react";
