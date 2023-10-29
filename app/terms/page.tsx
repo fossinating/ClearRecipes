@@ -13,7 +13,7 @@ export default function Page() {
             <br />
             <Typography variant="h5">Introduction</Typography>
             <Typography>
-                Welcome to Recipe App&apos;s Terms of Service! These terms govern your use of our services, including our website, software, and any associated products or features (collectively referred to as the &quot;Service&quot;).
+                Welcome to Clear Recipes&apos;s Terms of Service! These terms govern your use of our services, including our website, software, and any associated products or features (collectively referred to as the &quot;Service&quot;).
                 By accessing or using our Service, you agree to be bound by these terms. If you do not agree with any part of these terms, please refrain from using our Service.
             </Typography>
             <Typography variant="h5">User Obligations</Typography>
@@ -24,15 +24,15 @@ export default function Page() {
             </Typography>
             <Typography variant="h5">Advertisements</Typography>
             <Typography>
-                In order to support further development, Recipe App has a few ads in place on certain pages.
+                In order to support further development, Clear Recipes has a few ads in place on certain pages.
                 If you would like to show your appreciation for the service, we ask that you leave any ad blockers off.
                 However, we recognize that it is fully within your right to utilize a form of ad blocker, in which case unpaid UNC related ads may be shown as a backup.
                 These ads do not provide any revenue, nor do they utilize any form of tracking, they were created by student-run clubs and organizations at UNC.
-                If you run a club and are interested in having it advertised here, please reach out to us on Twitter or Instagram @Recipe App.
+                If you run a club and are interested in having it advertised here, please reach out to us on Twitter or Instagram @Clear Recipes.
             </Typography>
             <Typography variant="h5">Intellectual Property</Typography>
             <Typography>
-                All intellectual property rights in the Service, including but not limited to trademarks, copyrights, and patents, are owned by Recipe App.
+                All intellectual property rights in the Service, including but not limited to trademarks, copyrights, and patents, are owned by Clear Recipes.
                 We grant you a limited, non-exclusive, non-transferable license to use the Service in accordance with these terms. This license does not permit you to sell, distribute, or modify the Service without our prior written consent.
             </Typography>
             <Typography variant="h5">Privacy and Data</Typography>
@@ -47,7 +47,7 @@ export default function Page() {
             </Typography>
             <Typography variant="h5">Limitation of Liability</Typography>
             <Typography>
-                To the extent permitted by applicable law, Recipe App and its affiliates shall not be liable for any indirect, incidental, special, or consequential damages arising out of or in connection with the Service or these terms.
+                To the extent permitted by applicable law, Clear Recipes and its affiliates shall not be liable for any indirect, incidental, special, or consequential damages arising out of or in connection with the Service or these terms.
             </Typography>
             <Typography variant="h5">Termination</Typography>
             <Typography>
@@ -67,7 +67,7 @@ export default function Page() {
             </Typography>
             <Typography variant="h5">Entire Agreement</Typography>
             <Typography>
-                These terms constitute the entire agreement between you and Recipe App regarding your use of the Service and supersede any prior agreements or understandings, whether written or oral.
+                These terms constitute the entire agreement between you and Clear Recipes regarding your use of the Service and supersede any prior agreements or understandings, whether written or oral.
             </Typography>
         </Container>
     )

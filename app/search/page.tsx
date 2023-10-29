@@ -8,7 +8,7 @@ import React from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { RecipeSearchParams } from '@/api/recipe/search/route';
-import { Recipe, RecipeData } from '@/my/saved/page';
+import { Recipe, RecipeData } from '@/my/recipes/page';
 //import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 //import reportWebVitals from './reportWebVitals';
 

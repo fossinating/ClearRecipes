@@ -48,7 +48,7 @@ export default function WelcomeDialog() {
 
     return (
         <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Welcome to Recipe App!</DialogTitle>
+        <DialogTitle>Welcome to Clear Recipes!</DialogTitle>
         <DialogContent>
             <DialogContentText>
                 We&apos;re happy to have you, but before you can continue, we have to ask a few legal questions.

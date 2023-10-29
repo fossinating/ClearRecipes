@@ -9,7 +9,6 @@ export default async function Page({ params }: { params: { recipe_id: number } }
     
     const session = await auth()
 
-    console.log(params)
     const recipe = await db.query.recipes.findFirst({
         where: (recipes, {eq, and, or}) => and(eq(recipes.id, params.recipe_id), session?.user ? or(eq(recipes.ownerID, session.user.id), recipes.isPublic) : recipes.isPublic),
         with: {
@@ -36,6 +35,7 @@ export default async function Page({ params }: { params: { recipe_id: number } }
                 <Typography variant="h6">Yield: {recipe.yield}</Typography>
                 <Typography variant="h6">Author: {recipe.name}</Typography>
             </Box>
+            <img src={recipe.imageSrc} alt={recipe.name} />
             <Box sx={{ mt: 1 }}>
                 <Typography variant="h6">Ingredients</Typography>
                 <List sx={{ listStyleType: 'disc', ml: 4 }}>

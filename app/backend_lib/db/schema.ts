@@ -110,6 +110,7 @@ import { sql, relations } from "drizzle-orm"
       description: text("description").notNull(),
       ownerID: varchar("userId", { length: 255 }).notNull(),
       isPublic: boolean("isPublic"),
+      imageSrc: varchar("imageSrc", { length: 255 }).notNull(),
       time: int("time").notNull(),
       yield: varchar("yield", {length: 255}).notNull()
     }

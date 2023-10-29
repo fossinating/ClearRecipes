@@ -15,7 +15,7 @@ export default function Layout({
   return (
     <html lang="en">
       <head>
-        <title>Recipe App</title>
+        <title>Clear Recipes</title>
       </head>
       <body>
         <Providers>

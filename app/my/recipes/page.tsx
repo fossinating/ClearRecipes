@@ -31,6 +31,7 @@ export class Recipe {
     name: string;
     instructions: string;
     description: string;
+    imageSrc: string;
     time: number;
     yield: string;
     ingredients: Array<RecipeIngredientData>;
@@ -57,6 +58,7 @@ export class Recipe {
         this.instructions = data.instructions;
         this.description = data.description;
         this.time = data.time;
+        this.imageSrc = data.imageSrc;
         this.yield = data.yield;
         this.ingredients = data.ingredients;
 
@@ -148,6 +150,7 @@ export interface RecipeData {
     name: string;
     instructions: string;
     description: string;
+    imageSrc: string;
     time: number;
     yield: string;
     ingredients: Array<RecipeIngredientData>;

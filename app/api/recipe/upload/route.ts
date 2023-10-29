@@ -17,6 +17,7 @@ export interface UploadRecipeParams {
     description: string;
     time: number;
     yield: string;
+    imageSrc: string;
     ingredients: Array<RecipeIngredientParams>;
 }
  
@@ -25,7 +26,7 @@ export async function POST(req: NextRequest) {
     if (session && session?.user && session.user?.email) {
 
         let data: UploadRecipeParams = await req.json();
-        if (!data || !data.name || !data.instructions || !data.description || !data.time || !data.yield || data.name.length < 1 || data.name.length > 100 || data.instructions.length < 1 || data.description.length < 1 || data.time < 1 || data.yield.length < 1) {
+        if (!data || !data.name || !data.instructions || !data.description || !data.time || !data.yield || !data.imageSrc || data.name.length < 1 || data.imageSrc.length < 5 || !data.imageSrc.startsWith("https://") || data.name.length > 100 || data.instructions.length < 1 || data.description.length < 1 || data.time < 1 || data.yield.length < 1) {
             return NextResponse.json({
                 errMessage: "Invalid data"
             }, {status: 400})
@@ -37,6 +38,7 @@ export async function POST(req: NextRequest) {
                 description: data.description,
                 time: data.time,
                 yield: data.yield,
+                imageSrc: data.imageSrc,
                 isPublic: false,
                 ownerID: session.user.id
             })

@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react';
-import { Box, BoxProps } from '@mui/material';
+import { Box, BoxProps, CardMedia } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -11,8 +11,8 @@ import { CardActionArea, IconButton } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShareIcon from '@mui/icons-material/Share';
-import { Recipe } from '@/my/saved/page';
 import { useRouter } from 'next/navigation';
+import { Recipe } from '@/my/recipes/page';
 
 export interface Ingredient {
     name: string;
@@ -66,6 +66,12 @@ export default function RecipeCard(props: {recipe: Recipe}) {
     return (
         <Card variant="outlined" className='recipeCard' sx={{ minWidth: 275 }}>
             <CardActionArea onClick={() => {router.push("/recipe/"+props.recipe.id)}}>
+                <CardMedia
+                    component="img"
+                    height="194"
+                    image={props.recipe.imageSrc}
+                    alt={props.recipe.name}
+                />
                 <CardContent>
                     <Typography variant="h5" component="div">
                         {props.recipe.name}

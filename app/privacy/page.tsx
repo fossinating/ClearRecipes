@@ -22,15 +22,15 @@ export default function Page() {
             </Typography>
             <Typography variant="h5">Analytics</Typography>
             <Typography>
-            Recipe App utilizes Google Analytics in order to better understand our users.
-                By using Recipe App, you agree to have some level of information about your activity sent to Google Analytics servers.
+            Clear Recipes utilizes Google Analytics in order to better understand our users.
+                By using Clear Recipes, you agree to have some level of information about your activity sent to Google Analytics servers.
                 If you would like to limit the information sent, you can disable the cookies in <Link href="/settings">settings</Link>.
                 Disabling analytics cookies sets the consent mode for `analytics_storage` to `denied`.
                 You can learn more about what all that does on the official Google support page <Link href="https://support.google.com/analytics/answer/9976101">here</Link>.
             </Typography>
             <Typography variant="h5">Advertisements</Typography>
             <Typography>
-                Recipe App utilizes Google AdSense in order to support further development.
+                Clear Recipes utilizes Google AdSense in order to support further development.
                 If you would like to limit the information sent, you can disable the cookies in <Link href="/settings">settings</Link>.
                 Disabling advertisement cookies sets the consent mode for `ad_storage` to `denied`.
                 You can learn more about what all that does on the official Google support page <Link href="https://support.google.com/analytics/answer/9976101">here</Link>.
@@ -47,7 +47,7 @@ export default function Page() {
             </Typography>
             <Typography variant="h5">What Data is Collected</Typography>
             <Typography>
-                When using Recipe App with an account, the following data is collected for the following purposes:
+                When using Clear Recipes with an account, the following data is collected for the following purposes:
                 { /*<TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
