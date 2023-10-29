@@ -81,6 +81,25 @@ import { sql, relations } from "drizzle-orm"
       ),
     })
   )
+
+  export const recipeFavorites = mysqlTable(
+    "recipeFavorite",
+    {
+      userId: varchar("userId", { length: 255 }).notNull(),
+      recipeID: int("id").notNull(),
+    }
+  )
+
+  export const recipeFavoritesRelations = relations(recipeFavorites, ({one}) => ({
+    user: one(users, {
+      fields: [recipeFavorites.userId],
+      references: [users.id],
+    }),
+    recipe: one(recipes, {
+      fields: [recipeFavorites.recipeID],
+      references: [recipes.id],
+    }),
+  }))
   
   export const recipes = mysqlTable(
     "recipe",
@@ -96,8 +115,12 @@ import { sql, relations } from "drizzle-orm"
     }
   )
 
-  export const recipeRelations = relations(recipes, ({many}) => ({
+  export const recipeRelations = relations(recipes, ({many, one}) => ({
     recipesToIngredients: many(recipesToIngredients),
+    owner: one(users, {
+      fields: [recipes.ownerID],
+      references: [users.id],
+    }),
   }))
 
   export const ingredients = mysqlTable(

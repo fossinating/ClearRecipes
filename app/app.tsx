@@ -11,6 +11,9 @@ import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import HomeIcon from '@mui/icons-material/Home';
+import ContactsIcon from '@mui/icons-material/Contacts'
+import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import ListItemText from '@mui/material/ListItemText';
 import { createTheme, styled } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
@@ -21,6 +24,7 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import Link from "./lib/Link";
 import AccountMenu from './lib/AccountMenu';
+import { auth } from './backend_lib/auth';
 
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
@@ -83,15 +87,21 @@ interface NavDrawerProps{
 }
 
 function NavDrawer(props: NavDrawerProps){
+  const session = useSession();
+
   return (
     <div id="navDrawer" className={props.open ? 'open' : undefined}>
       <List>
       {[
-        new NavData("Home", <CalendarViewWeekIcon />, "/"),
+        new NavData("Home", <HomeIcon />, "/"),
         new NavData("Search", <SearchIcon />, "/search"),
-        new NavData("Upload", <UploadIcon />, "/upload")
+        new NavData("Upload", <UploadIcon />, "/upload"),
+        ...(session.status === "authenticated" ? [
+          new NavData("My Recipes", <ContactsIcon />, "/my/recipes"),
+          new NavData("Saved Recipes", <BookmarksIcon />, "/my/saved")
+        ] : [])
       ].map((item, index) => (
-        <NavItem item={item} key={item.page}/>
+        item ? <NavItem item={item} key={item.page}/> : null
       ))}</List>
     </div>
   )
