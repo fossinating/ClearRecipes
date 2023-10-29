@@ -1,11 +1,11 @@
 "use client"
 import './index.css';
 import { Box, TextField, Container, Typography, Card, CardContent, Collapse, FormGroup, FormControlLabel, Checkbox, BoxProps, Button, InputAdornment, IconButton } from '@mui/material';
-
 import RecipeCard from './lib/RecipeCard';
 import { useEffect, useRef, useState } from 'react';
 import React from 'react';
 import SearchIcon from '@mui/icons-material/Search';
+import { useRouter } from 'next/navigation';
 //import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 //import reportWebVitals from './reportWebVitals';
 
@@ -47,61 +47,24 @@ function Item(props: BoxProps) {
   );
 }
 
-export class SearchQuery {
-  keyword: string;
-  vegetarian: boolean;
-  vegan: boolean;
-  halal: boolean;
-  pescatarian: boolean;
-  glutenFree: boolean;
-  eggs: boolean;
-  dairy: boolean;
-  wheat: boolean;
-  peanuts: boolean;
-  treenuts: boolean;
-  fish: boolean;
-  shellfish: boolean;
-  soy: boolean;
-  sesame: boolean;
-
-  constructor(
-    keyword: string,
-    vegetarian: boolean,
-    vegan: boolean,
-    halal: boolean,
-    pescatarian: boolean,
-    glutenFree: boolean,
-    eggs: boolean,
-    dairy: boolean,
-    wheat: boolean,
-    peanuts: boolean,
-    treenuts: boolean,
-    fish: boolean,
-    shellfish: boolean,
-    soy: boolean,
-    sesame: boolean,) {
-      this.keyword = keyword;
-      this.vegetarian = vegetarian;
-      this.vegan = vegan;
-      this.halal = halal;
-      this.pescatarian = pescatarian;
-      this.glutenFree = glutenFree;
-      this.eggs = eggs;
-      this.dairy = dairy;
-      this.wheat = wheat;
-      this.peanuts = peanuts;
-      this.treenuts = treenuts;
-      this.fish = fish;
-      this.shellfish = shellfish;
-      this.soy = soy;
-      this.sesame = sesame;
-  }
-}
-
 export default function Page() {
   const [expanded, setExpanded] = React.useState(false);
   let keyword = React.useRef<HTMLInputElement>();
   const [vegetarian, setVegetarian] = useState(false);
+  const [vegan, setVegan] = useState(false);
+  const [halal, setHalal] = useState(false);
+  const [glutenFree, setGlutenFree] = useState(false);
+  const [pescatarian, setPescatarian] = useState(false);
+  const [eggs, setEggs] = useState(false);
+  const [dairy, setDairy] = useState(false);
+  const [wheat, setWheat] = useState(false);
+  const [peanuts, setPeanuts] = useState(false);
+  const [treenuts, setTreenuts] = useState(false);
+  const [soy, setSoy] = useState(false);
+  const [fish, setFish] = useState(false);
+  const [shellfish, setShellfish] = useState(false);
+  const [sesame, setSesame] = useState(false);
+  
 
   const handleExpandClick = () => {
     setExpanded(true);
@@ -111,10 +74,31 @@ export default function Page() {
     const ref = useOutsideClick(() => {
         setExpanded(false);
     });
-
-  const handleSearchSubmit = () => {
-    console.log(vegetarian);
-  }
+    const router = useRouter();
+    const handleSearchSubmit = () => {
+      let keyphrase = "";
+      if (keyword.current !== undefined) {
+        keyphrase = keyword.current.value;
+      }
+      let paramsObj = {
+        keyword: keyphrase,
+        vegetarian: vegetarian.toString(),
+        vegan: vegan.toString(),
+        halal: halal.toString(),
+        pescatarian: pescatarian.toString(),
+        glutenFree: glutenFree.toString(),
+        eggs: eggs.toString(), 
+        dairy: dairy.toString(), 
+        wheat: wheat.toString(), 
+        peanuts: peanuts.toString(), 
+        treenuts: treenuts.toString(), 
+        fish: fish.toString(), 
+        shellfish: shellfish.toString(), 
+        soy: soy.toString(), 
+        sesame: sesame.toString() };
+      const searchParams = new URLSearchParams(paramsObj);
+      router.push("/search?" + searchParams.toString())
+    }
   
     return (
       <Card ref={ref}>
@@ -136,10 +120,10 @@ export default function Page() {
                 <Typography paragraph>Dietary Restrictions:</Typography>
                 <FormGroup>
                   <FormControlLabel control={<Checkbox checked={vegetarian} onChange={() => (setVegetarian(!vegetarian))} />} label="Vegetarian" />
-                  <FormControlLabel control={<Checkbox />} label="Pescatarian" />
-                  <FormControlLabel control={<Checkbox />} label="Vegan" />
-                  <FormControlLabel control={<Checkbox />} label="Halal" />
-                  <FormControlLabel control={<Checkbox />} label="Gluten-Free" />
+                  <FormControlLabel control={<Checkbox checked={pescatarian} onChange={() => (setPescatarian(!pescatarian))} />} label="Pescatarian" />
+                  <FormControlLabel control={<Checkbox checked={vegan} onChange={() => (setVegan(!vegan))} />} label="Vegan" />
+                  <FormControlLabel control={<Checkbox checked={halal} onChange={() => (setHalal(!halal))} />} label="Halal" />
+                  <FormControlLabel control={<Checkbox checked={glutenFree} onChange={() => (setGlutenFree(!glutenFree))} />} label="Gluten-Free" />
                 </FormGroup>
               </Item>
               <Item>
@@ -147,19 +131,19 @@ export default function Page() {
                 <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
                   <Item>
                     <FormGroup>
-                      <FormControlLabel control={<Checkbox />} label="Eggs" />
-                      <FormControlLabel control={<Checkbox />} label="Wheat" />
-                      <FormControlLabel control={<Checkbox />} label="Dairy" />
-                      <FormControlLabel control={<Checkbox />} label="Peanuts" />
-                      <FormControlLabel control={<Checkbox />} label="Tree Nuts" />
+                      <FormControlLabel control={<Checkbox checked={eggs} onChange={() => (setEggs(!eggs))} />} label="Eggs" />
+                      <FormControlLabel control={<Checkbox checked={wheat} onChange={() => (setWheat(!wheat))} />} label="Wheat" />
+                      <FormControlLabel control={<Checkbox checked={dairy} onChange={() => (setDairy(!dairy))} />} label="Dairy" />
+                      <FormControlLabel control={<Checkbox checked={peanuts} onChange={() => (setPeanuts(!peanuts))} />} label="Peanuts" />
+                      <FormControlLabel control={<Checkbox checked={treenuts} onChange={() => (setTreenuts(!treenuts))} />} label="Tree Nuts" />
                     </FormGroup>
                   </Item>
                   <Item>
                     <FormGroup>
-                      <FormControlLabel control={<Checkbox />} label="Fish" />
-                      <FormControlLabel control={<Checkbox />} label="Shellfish" />
-                      <FormControlLabel control={<Checkbox />} label="Soy" />
-                      <FormControlLabel control={<Checkbox />} label="Sesame" />
+                      <FormControlLabel control={<Checkbox checked={fish} onChange={() => (setFish(!fish))} />} label="Fish" />
+                      <FormControlLabel control={<Checkbox checked={shellfish} onChange={() => (setShellfish(!shellfish))} />} label="Shellfish" />
+                      <FormControlLabel control={<Checkbox checked={soy} onChange={() => (setSoy(!soy))} />} label="Soy" />
+                      <FormControlLabel control={<Checkbox checked={sesame} onChange={() => (setSesame(!sesame))} />} label="Sesame" />
                     </FormGroup>
                   </Item>
                 </Box>
