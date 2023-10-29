@@ -1,8 +1,12 @@
-#recipeContainer {
+#recipesContainer {
     display: flex;
     margin-top: 2rem;
     flex-direction: row;
     justify-content: center;
     align-items: flex-start;
     flex-wrap: wrap;
-  }
+}
+
+.recipeCard {
+  margin: .5em;
+}

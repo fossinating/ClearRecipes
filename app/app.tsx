@@ -3,6 +3,7 @@
 import CalendarViewWeekIcon from '@mui/icons-material/CalendarViewWeek';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
+import UploadIcon from '@mui/icons-material/Upload';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,17 +11,21 @@ import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import HomeIcon from '@mui/icons-material/Home';
+import ContactsIcon from '@mui/icons-material/Contacts'
+import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import ListItemText from '@mui/material/ListItemText';
 import { createTheme, styled } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
+import Divider from '@mui/material/Divider';
 import * as React from 'react';
 import { useEffect } from 'react';
-import AccountMenu from './lib/AccountMenu';
 import Link from "./lib/Link";
-import { updateUserData, useDispatch } from './lib/redux';
+import AccountMenu from './lib/AccountMenu';
+import { auth } from './backend_lib/auth';
 
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
@@ -83,14 +88,22 @@ interface NavDrawerProps{
 }
 
 function NavDrawer(props: NavDrawerProps){
+  const session = useSession();
+
   return (
     <div id="navDrawer" className={props.open ? 'open' : undefined}>
       <List>
       {[
-        new NavData("Schedule", <CalendarViewWeekIcon />, "/"),
-        new NavData("Search", <SearchIcon />, "/search")
+        new NavData("Home", <HomeIcon />, "/"),
+        new NavData("Search", <SearchIcon />, "/search"),
+        new NavData("Upload", <UploadIcon />, "/upload"),
+        ...(session.status === "authenticated" ? [
+          null,
+          new NavData("My Recipes", <ContactsIcon />, "/my/recipes"),
+          new NavData("Saved Recipes", <BookmarksIcon />, "/my/saved")
+        ] : [])
       ].map((item, index) => (
-        <NavItem item={item} key={item.page}/>
+        item ? <NavItem item={item} key={item.page}/> : <Divider key={index} />
       ))}</List>
     </div>
   )
@@ -130,7 +143,7 @@ export default function App({
                 <MenuIcon />
                 </IconButton>
                 <Typography variant="h6" noWrap component="div">
-                Recipe App
+                Clear Recipes
                 </Typography>
                 <AccountMenu />
               </Toolbar>
