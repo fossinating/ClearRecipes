@@ -82,8 +82,8 @@ import { sql, relations } from "drizzle-orm"
     })
   )
 
-  export const recipeFavorites = mysqlTable(
-    "recipeFavorite",
+  export const recipeBookmarks = mysqlTable(
+    "recipeBookmarks",
     {
       id: int("id").notNull().primaryKey().autoincrement(),
       userId: varchar("userId", { length: 255 }).notNull(),
@@ -91,13 +91,13 @@ import { sql, relations } from "drizzle-orm"
     }
   )
 
-  export const recipeFavoritesRelations = relations(recipeFavorites, ({one}) => ({
+  export const recipeBookmarksRelations = relations(recipeBookmarks, ({one}) => ({
     user: one(users, {
-      fields: [recipeFavorites.userId],
+      fields: [recipeBookmarks.userId],
       references: [users.id],
     }),
     recipe: one(recipes, {
-      fields: [recipeFavorites.recipeID],
+      fields: [recipeBookmarks.recipeID],
       references: [recipes.id],
     }),
   }))
