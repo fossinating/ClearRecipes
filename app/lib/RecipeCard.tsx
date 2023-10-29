@@ -12,6 +12,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShareIcon from '@mui/icons-material/Share';
 import { Recipe } from '@/my/saved/page';
+import { useRouter } from 'next/navigation';
 
 export interface Ingredient {
     name: string;
@@ -47,14 +48,6 @@ export interface Ingredient {
     favorite: boolean;
 }*/
 
-const bull = (
-    <Box
-      component="span"
-      sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-    >
-      •
-    </Box>
-  );
 
 export default function RecipeCard(props: {recipe: Recipe}) {
     
@@ -67,9 +60,12 @@ export default function RecipeCard(props: {recipe: Recipe}) {
         }
     }
 
+    const router = useRouter();
+
+
     return (
         <Card variant="outlined" className='recipeDisplay' sx={{ minWidth: 275 }}>
-            <CardActionArea onClick={() => {window.alert("Click")}}>
+            <CardActionArea onClick={() => {router.push("/recipe/"+props.recipe.id)}}>
                 <CardContent>
                     <Typography variant="h5" component="div">
                         {props.recipe.name}

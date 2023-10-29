@@ -212,7 +212,7 @@ export default function Page() {
       <Typography variant='h3'>All Recipes</Typography>
       <SearchBar />
       <Container id="recipeContainer">
-      { results ? results.map((recipe: Recipe) => <RecipeCard key={recipe.id}/>) : null}
+      { results ? results.map((recipe: Recipe) => <RecipeCard key={recipe.id} recipe={recipe}/>) : null}
       </Container>
     </Box>
   );
