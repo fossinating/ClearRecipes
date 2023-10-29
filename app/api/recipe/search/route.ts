@@ -54,11 +54,23 @@ export async function POST(req: NextRequest) {
                     NOT ${ingredients.diet_vegan} AND ${data.diet_vegan as boolean}, 
                     NOT ${ingredients.diet_vegetarian} AND ${data.diet_vegetarian as boolean}, 
                     NOT ${ingredients.diet_pescatarian} AND ${data.diet_pescatarian as boolean}))`
-                    )))))
+                    ))))),
+            with: {
+                recipesToIngredients: {
+                    with: {
+                        ingredient: true
+                    }
+                }
+            }
         })
 
         return NextResponse.json({ 
-            recipes: recipes
+            recipes: recipes.map((recipeData) => {
+                return ({
+                    ...recipeData,
+                    ingredients: recipeData.recipesToIngredients.map((recipeToIngrient) => ({name: recipeToIngrient.ingredient, quantity: recipeToIngrient.quantity}))
+                })
+            }).map(({recipesToIngredients, ...rest}) => rest)
         }, {status: 200});
     }
 }
