@@ -47,24 +47,6 @@ export interface Ingredient {
     favorite: boolean;
 }*/
 
-function Item(props: BoxProps) {
-    const { sx, ...other } = props;
-    return (
-      <Box
-        sx={{
-          bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#101010' : '#fff'),
-          color: (theme) => (theme.palette.mode === 'dark' ? 'grey.300' : 'grey.800'),
-          p: 1,
-          m: 1,
-          fontSize: '0.875rem',
-          fontWeight: '700',
-          ...sx,
-        }}
-        {...other}
-      />
-    );
-  }
-
 const bull = (
     <Box
       component="span"
@@ -93,22 +75,22 @@ export default function RecipeCard(props: {recipe: Recipe}) {
                         {props.recipe.name}
                     </Typography>
                     <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
-                        <Item>
-                            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                Time
+                        <Box sx={{ mb: 0.75 }}>
+                            <Typography>
+                                Time:
                             </Typography>
                             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                {props.recipe.time}
+                                {props.recipe.time} minutes
                             </Typography>
-                        </Item>
-                        <Item>
-                            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                Yield
+                        </Box>
+                        <Box sx={{ mb: 0.75 }}>
+                            <Typography>
+                                Yield:
                             </Typography>
                             <Typography sx={{ mb: 1.5 }} color="text.secondary">
                                 {props.recipe.yield}
                             </Typography>
-                        </Item>
+                        </Box>
                     </Box>
                     <Typography variant="body2">
                         {props.recipe.description}
