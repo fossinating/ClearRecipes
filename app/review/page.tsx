@@ -3,7 +3,6 @@ import { Button, Container, FormControl, InputLabel, MenuItem, TextField, Unstab
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useRef, useState } from "react";
 import { SectionData, useTerms } from "../lib/Common";
-import "./Search.css";
 
 export interface SnackbarMessage {
   message: string;
