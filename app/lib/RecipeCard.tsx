@@ -12,7 +12,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShareIcon from '@mui/icons-material/Share';
 import { useRouter } from 'next/navigation';
-import { Recipe } from '@/my/recipes/page';
+import { Recipe } from "@/lib/Recipe";
 
 export interface Ingredient {
     name: string;

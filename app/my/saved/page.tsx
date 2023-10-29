@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import * as React from 'react';
 import RecipeCard from "@/lib/RecipeCard";
-import { Recipe, RecipeData } from "../recipes/page";
+import { Recipe, RecipeData } from "@/lib/Recipe";
 
 export default function Page() {
   //const [sortParam, setSortParam] = React.useState(0);

@@ -6,12 +6,12 @@ import { useEffect, useRef, useState } from 'react';
 import React from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import { useRouter } from 'next/navigation';
-import { Recipe, RecipeData } from './my/recipes/page'
+import { Recipe, RecipeData } from "@/lib/Recipe";
 
 //import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 //import reportWebVitals from './reportWebVitals';
 
-export const useOutsideClick = (callback: () => void) => {
+const useOutsideClick = (callback: () => void) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

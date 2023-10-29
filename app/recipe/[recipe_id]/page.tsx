@@ -3,6 +3,7 @@ import { db } from "@/backend_lib/db/drizzle";
 import { recipesToIngredients } from "@/backend_lib/db/schema";
 import { Box, List, ListItem, Typography } from "@mui/material";
 import { useEffect } from "react";
+import Image from "next/image"
 
 export default async function Page({ params }: { params: { recipe_id: number } }) {
 
@@ -35,7 +36,7 @@ export default async function Page({ params }: { params: { recipe_id: number } }
                 <Typography variant="h6">Yield: {recipe.yield}</Typography>
                 <Typography variant="h6">Author: {recipe.name}</Typography>
             </Box>
-            <img src={recipe.imageSrc} alt={recipe.name} />
+            <Image src={recipe.imageSrc} alt={recipe.name} />
             <Box sx={{ mt: 1 }}>
                 <Typography variant="h6">Ingredients</Typography>
                 <List sx={{ listStyleType: 'disc', ml: 4 }}>

@@ -8,6 +8,7 @@ import {
     FormControl,
     FormHelperText
     } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { UploadRecipeParams } from "@/api/recipe/upload/route";
 import { useRouter } from 'next/navigation';
 import { relative } from 'path';
@@ -42,6 +43,7 @@ export default function Page() {
     let [yieldError, setYieldError] = React.useState<string>()
     let recipeImage = React.useRef<HTMLInputElement>();
     let [imageError, setImageError] = React.useState<string>()
+    const [submitting, setSubmitting] = React.useState(false);
     const router = useRouter()
     
     let [ingredients, setIngredients] = React.useState<Array<Ingredient>>([new Ingredient()]);
@@ -150,6 +152,7 @@ export default function Page() {
             return ingredient;
         }))
         if (!flag) {
+            setSubmitting(true);
             const response = await fetch("/api/recipe/upload", {
                 method: "POST",
                 body: JSON.stringify({
@@ -163,7 +166,7 @@ export default function Page() {
                 } as UploadRecipeParams),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
             }).then((response) => response.json())
-            .then(data => router.push("/recipe/"+data["recipeID"]))
+            .then(data => router.push("/recipe/"+data["recipeID"])).catch(() => {setSubmitting(false)});
         }
     }
 
@@ -174,7 +177,7 @@ export default function Page() {
             <Box>
                 <Typography variant='h5'>Recipe Info</Typography>
                 <Typography variant='body1'>
-                    'Name' must be under 100 characters. Enter just a number for 'Hours' and 'Minutes'. Format 'Yield' as "X Servings".
+                    &apos;Name&apos; must be under 100 characters. Enter just a number for &apos;Hours&apos; and &apos;Minutes&apos;. Format &apos;Yield&apos; as &apos;X servings&apos;.
                 </Typography>
                 <TextField sx={{ mr: 1 }} error={nameError !== undefined} variant="outlined" label="Name" inputRef={recipeName} helperText={nameError}/>
                 <TextField sx={{ mr: 1 }} multiline error={descError !== undefined} variant="outlined" label="Description" inputRef={recipeDesc} helperText={descError}/>
@@ -186,8 +189,8 @@ export default function Page() {
             <Box sx={{ mt: 1 }}>
                 <Typography variant='h5'>Ingredients</Typography>
                 <Typography variant='body1'>
-                    Enter the name and amount of each ingredient. Use the 'Add Ingredient' button to add another ingredient, and the 
-                    'Delete' button to remove an ingredient. Include measurement as a part of 'Ingredient Amount'.
+                    Enter the name and amount of each ingredient. Use the &apos;Add Ingredient&apos; button to add another ingredient, and the 
+                    &apos;Delete&apos; button to remove an ingredient. Include measurement as a part of &apos;Ingredient Amount&apos;.
                 </Typography>
                 {ingredients.map((ingredient, index) => 
                 <Box key={index} style={{display:"flex", alignItems:"center"}} sx={{ mb: 1 }}>
@@ -211,7 +214,7 @@ export default function Page() {
                 </Typography>
                 <TextField fullWidth multiline error={instructionsError !== undefined} variant="outlined" label="Instructions" inputRef={recipeInstructions} helperText={instructionsError}/>
             </Box>
-            <Button sx={{ mt: 1 }} variant="contained" onClick={() => submitForm()}>Submit</Button>
+            <LoadingButton loading={submitting} sx={{ mt: 1 }} variant="contained" onClick={() => submitForm()}>Submit</LoadingButton>
         </Box>
       </Box>
     );
