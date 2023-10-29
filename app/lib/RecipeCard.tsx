@@ -64,7 +64,7 @@ export default function RecipeCard(props: {recipe: Recipe}) {
 
 
     return (
-        <Card variant="outlined" className='recipeDisplay' sx={{ minWidth: 275 }}>
+        <Card variant="outlined" className='recipeCard' sx={{ minWidth: 275 }}>
             <CardActionArea onClick={() => {router.push("/recipe/"+props.recipe.id)}}>
                 <CardContent>
                     <Typography variant="h5" component="div">

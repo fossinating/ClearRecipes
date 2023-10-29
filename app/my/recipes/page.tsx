@@ -196,7 +196,7 @@ export default function Page() {
           <Button onClick={() => search()} variant="contained" size="medium">Search</Button>
         </Grid>
   </Grid>*/}
-      <Container id="resultsContainer">
+      <Container id="recipesContainer">
         { results ? results.map((recipe: Recipe) => <RecipeCard key={recipe.id} recipe={recipe}/>) : null}
       </Container>
       </>

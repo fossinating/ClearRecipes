@@ -20,6 +20,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
+import Divider from '@mui/material/Divider';
 import * as React from 'react';
 import { useEffect } from 'react';
 import Link from "./lib/Link";
@@ -97,11 +98,12 @@ function NavDrawer(props: NavDrawerProps){
         new NavData("Search", <SearchIcon />, "/search"),
         new NavData("Upload", <UploadIcon />, "/upload"),
         ...(session.status === "authenticated" ? [
+          null,
           new NavData("My Recipes", <ContactsIcon />, "/my/recipes"),
           new NavData("Saved Recipes", <BookmarksIcon />, "/my/saved")
         ] : [])
       ].map((item, index) => (
-        item ? <NavItem item={item} key={item.page}/> : null
+        item ? <NavItem item={item} key={item.page}/> : <Divider key={index} />
       ))}</List>
     </div>
   )
