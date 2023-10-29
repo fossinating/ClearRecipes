@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, BoxProps, CardMedia } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Card from '@mui/material/Card';
@@ -13,6 +13,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShareIcon from '@mui/icons-material/Share';
 import { useRouter } from 'next/navigation';
 import { Recipe } from "@/lib/Recipe";
+import { useSession } from 'next-auth/react';
 
 export interface Ingredient {
     name: string;
@@ -51,16 +52,37 @@ export interface Ingredient {
 
 export default function RecipeCard(props: {recipe: Recipe}) {
     
-    const [clicked, setClicked] = useState(false)
+    const [bookmarked, setBookmarked] = useState(false)
     const handleFavoriteClick = () => {
-        if (clicked) {
-            setClicked(false);
+        if (bookmarked) {
+            setBookmarked(false);
         } else {
-            setClicked(true)
+            setBookmarked(true)
         }
+
+        fetch("/api/user/bookmark", {
+            method: "POST",
+            body: JSON.stringify({
+                recipeID: props.recipe.id,
+                bookmark: !bookmarked
+            })
+        })
     }
 
     const router = useRouter();
+    const session = useSession();
+
+
+    useEffect(() => {
+        if (session) {
+            fetch("/api/user/bookmark", {
+                method: "GET",
+                body: JSON.stringify(props.recipe.id)})
+            .then((res) => res.json())
+            .then((data) => {setBookmarked(data.bookmarked)})
+        }
+     }, [])
+
 
 
     return (
@@ -101,7 +123,7 @@ export default function RecipeCard(props: {recipe: Recipe}) {
             </CardActionArea>
             <CardActions>
                 <IconButton aria-label="add to favorites" onClick={handleFavoriteClick}>
-                    {clicked ? <FavoriteIcon /> : <FavoriteBorderIcon /> }
+                    {bookmarked ? <FavoriteIcon /> : <FavoriteBorderIcon /> }
                 </IconButton>
                 <IconButton aria-label="share">
                     <ShareIcon />
