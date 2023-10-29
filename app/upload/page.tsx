@@ -10,6 +10,7 @@ import {
     } from '@mui/material';
 import { UploadRecipeParams } from "@/api/recipe/upload/route";
 import { useRouter } from 'next/navigation';
+import { relative } from 'path';
 
 class Ingredient {
     name: string;
@@ -39,6 +40,8 @@ export default function Page() {
     let [minError, setMinError] = React.useState<string>()
     let recipeYield = React.useRef<HTMLInputElement>();
     let [yieldError, setYieldError] = React.useState<string>()
+    let recipeImage = React.useRef<HTMLInputElement>();
+    let [imageError, setImageError] = React.useState<string>()
     const router = useRouter()
     
     let [ingredients, setIngredients] = React.useState<Array<Ingredient>>([new Ingredient()]);
@@ -125,6 +128,12 @@ export default function Page() {
         } else {
             setYieldError(undefined);
         }
+        if (recipeImage.current?.value?.length === 0) {
+            setImageError("Required");
+            flag = true;
+        } else {
+            setImageError(undefined);
+        }
         setIngredients(ingredients.map((ingredient: Ingredient, _index: number) => {
             if (ingredient.name.length === 0) {
                 ingredient.nameError = "Required";
@@ -149,6 +158,7 @@ export default function Page() {
                     description: recipeDesc.current?.value,
                     time: parseInt(recipeHours.current?.value as string)*60 + parseInt(recipeMinutes.current?.value as string),
                     yield: recipeYield.current?.value,
+                    imageSrc: recipeImage.current?.value,
                     ingredients: ingredients.map((ingredient) => {return {name: ingredient.name, amount: ingredient.amount}})
                 } as UploadRecipeParams),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
@@ -161,24 +171,47 @@ export default function Page() {
       <Box>
         <Typography variant='h3'>Upload Recipe</Typography>
         <Box>
-            <TextField error={nameError !== undefined} variant="outlined" label="Name" inputRef={recipeName} helperText={nameError}/>
-            <TextField multiline error={descError !== undefined} variant="outlined" label="Description" inputRef={recipeDesc} helperText={descError}/>
-            <TextField multiline error={instructionsError !== undefined} variant="outlined" label="Instructions" inputRef={recipeInstructions} helperText={instructionsError}/>
-            <TextField error={hourError !== undefined} variant="outlined" label="Hours" inputRef={recipeHours} helperText={hourError}/>
-            <TextField error={minError !== undefined} variant="outlined" label="Minutes" inputRef={recipeMinutes} helperText={minError}/>
-            <TextField error={yieldError !== undefined} variant="outlined" label="Yield" inputRef={recipeYield} helperText={yieldError}/>
-
-            {ingredients.map((ingredient, index) => 
-            <Box key={index}>
-            <TextField error={ingredient.nameError !== undefined} helperText={ingredient.nameError} variant="outlined" label="Ingredient Name" value={ingredient.name} onChange={
-                (event: React.ChangeEvent<HTMLInputElement>) => {updateIngredientName(index, event.target.value)}}/>
-            <TextField error={ingredient.amountError !== undefined} helperText={ingredient.amountError} variant="outlined" label="Ingredient Amount" value={ingredient.amount} onChange={
-                (event: React.ChangeEvent<HTMLInputElement>) => {updateIngredientAmount(index, event.target.value)}}/>
-            <Button variant="contained" onClick={() => deleteIngredient(index)}>Delete</Button>
-            </Box>)}
-            <Button variant="contained" onClick={() => addIngredient()}>Add Ingredient</Button>
-            
-            <Button variant="contained" onClick={() => submitForm()}>Submit</Button>
+            <Box>
+                <Typography variant='h5'>Recipe Info</Typography>
+                <Typography variant='body1'>
+                    'Name' must be under 100 characters. Enter just a number for 'Hours' and 'Minutes'. Format 'Yield' as "X Servings".
+                </Typography>
+                <TextField sx={{ mr: 1 }} error={nameError !== undefined} variant="outlined" label="Name" inputRef={recipeName} helperText={nameError}/>
+                <TextField sx={{ mr: 1 }} multiline error={descError !== undefined} variant="outlined" label="Description" inputRef={recipeDesc} helperText={descError}/>
+                <TextField sx={{ mr: 1 }} error={hourError !== undefined} variant="outlined" label="Hours" inputRef={recipeHours} helperText={hourError}/>
+                <TextField sx={{ mr: 1 }} error={minError !== undefined} variant="outlined" label="Minutes" inputRef={recipeMinutes} helperText={minError}/>
+                <TextField sx={{ mr: 1 }} error={yieldError !== undefined} variant="outlined" label="Yield" inputRef={recipeYield} helperText={yieldError}/>
+                <TextField sx={{ mr: 1 }} error={imageError !== undefined} variant="outlined" label="Image Link" inputRef={recipeImage} helperText={imageError}/>
+            </Box>
+            <Box sx={{ mt: 1 }}>
+                <Typography variant='h5'>Ingredients</Typography>
+                <Typography variant='body1'>
+                    Enter the name and amount of each ingredient. Use the 'Add Ingredient' button to add another ingredient, and the 
+                    'Delete' button to remove an ingredient. Include measurement as a part of 'Ingredient Amount'.
+                </Typography>
+                {ingredients.map((ingredient, index) => 
+                <Box key={index} style={{display:"flex", alignItems:"center"}} sx={{ mb: 1 }}>
+                <TextField sx={{ mr: 1 }} error={ingredient.nameError !== undefined} helperText={ingredient.nameError} variant="outlined" label="Ingredient Name" value={ingredient.name} onChange={
+                    (event: React.ChangeEvent<HTMLInputElement>) => {updateIngredientName(index, event.target.value)}}/>
+                <TextField sx={{ mr: 1 }} error={ingredient.amountError !== undefined} helperText={ingredient.amountError} variant="outlined" label="Ingredient Amount" value={ingredient.amount} onChange={
+                    (event: React.ChangeEvent<HTMLInputElement>) => {updateIngredientAmount(index, event.target.value)}}/>
+                <Button sx={{ mr: 1 }} variant="contained" onClick={() => deleteIngredient(index)}>Delete</Button>
+                </Box>)}
+                <Button variant="contained" onClick={() => addIngredient()}>Add Ingredient</Button>
+            </Box>
+            <Box sx={{ mt: 1 }}>
+                <Typography variant='h5'>Instructions</Typography>
+                <Typography variant='body1'>
+                    Enter the instructions for your recipe. Format your instructions however you like; they will appear 
+                    exactly as you enter them here. Using headers and numeric lists is recommended.<br />For example:
+                </Typography>
+                <Typography sx={{ ml: 1 }} variant='body1'>
+                    Section 1<br />1. Step 1<br />2. Step 2
+                    <br />Section 2<br />1. Step 1
+                </Typography>
+                <TextField fullWidth multiline error={instructionsError !== undefined} variant="outlined" label="Instructions" inputRef={recipeInstructions} helperText={instructionsError}/>
+            </Box>
+            <Button sx={{ mt: 1 }} variant="contained" onClick={() => submitForm()}>Submit</Button>
         </Box>
       </Box>
     );
