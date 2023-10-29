@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from 'react';
 import React from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import { useRouter } from 'next/navigation';
+import { Recipe, RecipeData } from './my/recipes/page'
+
 //import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 //import reportWebVitals from './reportWebVitals';
 
@@ -152,13 +154,24 @@ export default function Page() {
     );
   };
   
+  const [results, setResults] = useState<Array<Recipe>>();
+  React.useEffect(() => {
+    fetch("/api/user/recipes", {
+        method:"GET",
+    })
+    .then((res) => res.json())
+    .then((data: { recipes: Array<RecipeData>}) => {
+      console.log(data);
+      setResults(data.recipes.map((recipeData: RecipeData) => new Recipe(recipeData)))
+    })
+  }, [])
+
   return (
     <Box>
       <Typography variant='h3'>All Recipes</Typography>
       <SearchBar />
       <Container id="recipeContainer">
-        <RecipeCard />
-        <RecipeCard />
+        { results ? results.map((recipe: Recipe) => <RecipeCard key={recipe.id} recipe={recipe}/>) : null}
       </Container>
     </Box>
   );
