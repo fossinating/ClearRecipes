@@ -1,6 +1,6 @@
 # Clear Recipes
 
-This is a project developed by [@fossinating] and [@krohan03] as a part of the 2023 HackNC hackathon. It was designed to assist people with dietary restrictions in finding recipes that can work for them.
+This is a project developed by [@fossinating](https://github.com/fossinating) and [@krohan03](https://github.com/krohan03) as a part of the 2023 HackNC hackathon. It was designed to assist people with dietary restrictions in finding recipes that can work for them.
 
 ## Current Features
 
